@@ -73,8 +73,8 @@ class QuantumCircuit:
             Args:
                 :param target_qubits: list of target qubits
             Returns:
-                Unitary operator for a controlled-X gate.
-                CNOT_op = n_kron(P0, I, I) + n_kron(P1, I, X) for a 3 qubit system where
+                Unitary operator for a controlled-X gate. For example, for a 3 qubit system:
+                CNOT_op = n_kron(P0, I, I) + n_kron(P1, I, X) where
                 controlled qubit is 0 and target qubit is 1. P0 and P1 are projection operators.
                 n_kron calculates the Kronecker product of variable numbers of inputs. The
                 location of X is varied based on the target qubit.
