@@ -14,21 +14,22 @@ class QuantumCircuit:
         self.num_qubits = num_qubits
 
     def get_ground_state(self):
-        """Return a Numpy.array corresponding the ground state (all qubits in state |0>).
-                Returns:
-                    np.ndarray of size 2**num_qubits with first element 1.0
-                """
+        """Return a Numpy.array corresponding to the ground state (all qubits in state |0>)
+            of a  n qubit system .
+            Returns:
+                np.ndarray of size 2**num_qubits with first element 1.0 and rest 0.0
+        """
         state = np.zeros(2 ** self.num_qubits)
         state[0] = 1.0
         return state
 
     def get_state_index(self, state):
         """Return indices of the elements of a 1d Numpy array (state vector).
-                Args:
-                    state: 1d np.array
-                Returns:
-                    binary indices of the array. For example, for a 2 qubit system,
-                    '00', '01', '10', '11'
+            Args:
+                state: 1d np.array
+            Returns:
+                binary indices of the array. For example, for a 2 qubit system,'00', '01',
+                '10', '11'.
         """
 
         state_index = np.arange(0, len(state))
@@ -46,13 +47,14 @@ class QuantumCircuit:
     def op_single_q_gates(self, gate_unitary, target_qubits):
         """Return matrix operator for a single qubit gate.
             Args:
-                :param gate_unitary: unitary matrix corresponding to a single qubit gate, for example,
-                Hadamard gate.
+                :param gate_unitary: unitary matrix corresponding to a single qubit gate,
+                for example, a Hadamard gate.
                 :param target_qubits: list of target qubits
             Returns:
                 Unitary operator of size 2**n x 2**n for given gate and target qubits
                 O = U X I X I
-                where O = operator, U = Unitary gate and I=Identity matrix of size 2x2
+                where O = operator, U = Unitary gate and I=Identity matrix of size 2x2. The
+                position of U is varied based on the target qubit.
             Raises:
                 ValueError if the gate size is not equal to 2^(len(target)*2)
         """
@@ -68,15 +70,16 @@ class QuantumCircuit:
 
     def op_cnot(self, target_qubits):
         """Return matrix operator for a CNOT (Controlled-X) gate.
-                Args:
-                    :param target_qubits: list of target qubits
-                Returns:
-                     Unitary operator for a controlled-X gate.
-                     CNOT_op = n_kron(P0, I, I) + n_kron(P1, I, X) for a 3 qubit system where controlled
-                     qubit is 0 and target qubit is 1. P0 and P1 are projection operators. n_kron
-                     calculates the Kronecker product of variable numbers of inputs.
-                Raises:
-                    ValueError if there are more than one controlled or target qubits
+            Args:
+                :param target_qubits: list of target qubits
+            Returns:
+                Unitary operator for a controlled-X gate.
+                CNOT_op = n_kron(P0, I, I) + n_kron(P1, I, X) for a 3 qubit system where
+                controlled qubit is 0 and target qubit is 1. P0 and P1 are projection operators.
+                n_kron calculates the Kronecker product of variable numbers of inputs. The
+                location of X is varied based on the target qubit.
+            Raises:
+                ValueError if there are more than one controlled or target qubits
         """
 
         if len(target_qubits) > 2:
@@ -110,7 +113,6 @@ class QuantumCircuit:
                 :param ops: list of unitary operators
             Returns:
                 Final state of the system after non-unitary operations on initial state
-
         """
         list_ops = [op for op in ops]
         list_ops.append(initial_state)
@@ -134,4 +136,5 @@ class QuantumCircuit:
         for key, value in zip(state_index, state_count):
             counts[key] = value
         return counts
+
 
