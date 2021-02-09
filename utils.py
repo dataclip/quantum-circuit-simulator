@@ -2,7 +2,7 @@ import numpy as np
 
 
 def n_kron(*inputs):
-    """Create a new circuit.
+    """Return Kronecker product of a variable number of input.
         Args:
             Variable number of input matrices and vectors
         Returns:
