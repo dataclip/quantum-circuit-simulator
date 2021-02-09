@@ -2,7 +2,7 @@ import numpy as np
 
 
 def n_kron(*inputs):
-    """Return Kronecker product of a variable number of input.
+    """Return Kronecker product of a variable number of inputs.
         Args:
             Variable number of input matrices and vectors
         Returns:
