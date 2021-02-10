@@ -44,28 +44,45 @@ class QuantumCircuit:
                                      len(state_binary_index[i])) * '0' + state_binary_index[i]
         return state_binary_index
 
-    def op_single_q_gates(self, gate_unitary, target_qubits):
+    def op_single_q_gates(self, gate_unitary, target_qubits, **params):
         """Return matrix operator for a single qubit gate.
             Args:
-                :param gate_unitary: unitary matrix corresponding to a single qubit gate,
-                for example, a Hadamard gate.
-                :param target_qubits: list of target qubits
+                gate_unitary: unitary matrix corresponding to a single qubit gate,
+                for example, a Hadamard gate. If gate is U3, additional parameters theta, lambda and phi should be
+                passed.
+                target_qubits: list of target qubits
             Returns:
-                Unitary operator of size 2**n x 2**n for given gate and target qubits
-                O = U X I X I
+                Unitary operator of size 2**n x 2**n for given gate and target qubits. For example, for a 2 qubit
+                system, O = U X I X I
                 where O = operator, U = Unitary gate and I=Identity matrix of size 2x2. The
                 position of U is varied based on the target qubit.
             Raises:
                 ValueError if the gate size is not equal to 2^(len(target)*2)
         """
 
-        if gate_unitary.size != 2 ** (len(target_qubits) * 2):
-            raise ValueError('You must set gate.size==2^(len(target_qubits)*2)')
+        # if gate_unitary.size != 2 ** (len(target_qubits) * 2):
+        #     raise ValueError('You must set gate.size==2^(len(target_qubits)*2)')
 
         I = np.identity(2)
         list_of_identity_elements = [I] * self.num_qubits
-        list_of_identity_elements[target_qubits[0]] = gate_unitary
-        op = n_kron(*list_of_identity_elements)
+        keys = []
+        values = []
+        for key, value in params.items():
+            keys.append(key)
+            values.append(value)
+
+        if gate_unitary == 'U3':
+
+            U3 = [[np.cos(values[0] / 2.0), -np.exp((0 + 1j) * values[1]) * np.sin(values[0] / 2.0)],
+                  [np.exp((0 + 1j) * values[1]) * np.sin(values[0] / 2.0),
+                   np.exp((0 + 1j) * values[2] + (0 + 1j) * values[1]) * np.cos(values[0] / 2.0)]]
+            list_of_identity_elements[target_qubits[0]] = U3
+            op = n_kron(*list_of_identity_elements)
+
+        else:
+            list_of_identity_elements[target_qubits[0]] = gate_unitary
+            op = n_kron(*list_of_identity_elements)
+
         return op
 
     def op_cnot(self, target_qubits):
