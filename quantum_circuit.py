@@ -142,9 +142,11 @@ class QuantumCircuit:
                 :param num_shots: number of measurements
                 :param final_state: Final state of the circuit
             Returns:
-               number of occurrences for each state with non-zero probability amplitude
+               a dictionary containing number of occurrences for each state with non-zero probability amplitude
+               a numpy array of the count of each state
+
         """
-        prob = final_state ** 2
+        prob = np.real(final_state * np.conjugate(final_state))
         final_state_binary_index = self.get_state_index(final_state)
         weighted_random_array = np.array([np.random.choice(final_state_binary_index, p=prob)
                                           for i in range(num_shots)])
@@ -152,6 +154,6 @@ class QuantumCircuit:
         counts = {}
         for key, value in zip(state_index, state_count):
             counts[key] = value
-        return counts
+        return counts, state_count
 
 
