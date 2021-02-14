@@ -124,7 +124,7 @@ class QuantumCircuit:
         return op
 
     def measure(self, initial_state, ops):
-        """Return dot products of initial state and Unitary operators
+        """Return dot product of initial state and Unitary operators
             Args:
                 :param initial_state: state vector of ann qubit system
                 :param ops: list of unitary operators
